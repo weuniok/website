@@ -191,15 +191,16 @@ export function CommandsPalette({
                 </CommandItem>
               </CommandGroup>
               <CommandGroup heading={<GroupHeading>Links</GroupHeading>}>
-                <CommandItem href="https://twitter.com/hasparus">
+                {/* <CommandItem href="https://twitter.com/hasparus">
                   Twitter
-                </CommandItem>
-                <CommandItem href="https://github.com/hasparus/zaduma">
+                </CommandItem> */}
+                <CommandItem href="https://github.com/weuniok/website">
                   GitHub
                 </CommandItem>
-                <CommandItem href="https://github.com/hasparus/zaduma/issues">
+                {/* <CommandItem href="https://github.com/hasparus/zaduma/issues">
                   Contact
-                </CommandItem>
+                </CommandItem> */}
+                {/* // TODO: */}
                 <CommandItem href="/rss.xml">RSS</CommandItem>
               </CommandGroup>
             </>
