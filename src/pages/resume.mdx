@@ -1,0 +1,85 @@
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+export { mdxComponents as components } from "../lib/mdxComponents";
+import { mdxComponents as components } from "../lib/mdxComponents";
+
+<BaseLayout title="weuniok | resume">
+<main class="resume zaduma-prose py-4">
+
+<h1 class="!mb-0 mt-6 font-semibold text-gray-600 dark:text-gray-300">
+  Paweł Pietrzak
+</h1>
+<div class="text-gray-600 dark:text-gray-300">
+  <Link href="mailto:pawel.pietrzak.kontakt@outlook.com">pawel.pietrzak.kontakt@outlook.com</Link>
+  <br/>
+  <Link href="https://weuniok.vercel.app/">https://weuniok.vercel.app/</Link>
+  <br/>
+  <Link href="https://github.com/weuniok">https://github.com/weuniok</Link>
+</div>
+
+## Experience
+
+### neenCare — since January 2024
+
+Cofounded a startup to develop an infant life sign monitoring system, overseeing end-to-end product development from concept to MVP.
+
+- Led mobile application development using React Native to deliver real-time monitoring capabilities to caregivers.
+- Co-designed the physical sensor system, including embedded C programming and electronics, ensuring reliable data acquisition.
+- Integrated the mobile app and sensor data with a cloud-based database, providing seamless data synchronization and remote access.
+- Engaged in rapid prototyping, testing, and iterative improvements based on user feedback, ensuring an agile development process.
+- Managed cross-functional tasks such as market research, fundraising, and user experience design to align the product with startup goals.
+
+### Quickersim — since June 2022
+
+- Developed and maintained three web applications for engineering simulations focused on statics and Computational Fluid Dynamics (CFD). Built with a React front-end, Django/Node back-end, MATLAB simulation engines, and Python-based microservices on GCP. 
+- Built tools provided engineers with robust, scalable platforms for high-performance computational tasks, significantly reducing engineering time by streamlining design processes
+- Optimized key artifact generation by a factor of 5, halved it's size and revamped the user experience flow 
+
+### Warsaw University of Technology — from July 2023 to October 2023
+
+Developing Infant Monitoring System for SIDS (Sudden Infant Death Syndrome) Prevention.
+- Designing the measurement system 
+- Mobile&Web App creation (React Native)
+- Programming the system controller computer (Python)
+
+### SAE AeroDesign — from July 2021 to April 2023
+
+- Club's management as a board member
+- Arranging public procurements through the University.
+- Co-authored a research paper about 5G C-Band impact on aviation.
+- Plane construction for SAE Aero Design competition.
+- Co-authored 3 planes technical documentation (1st place, 2x4th place) and presented
+- Presented our design in front of jury once (1st place)
+
+### Airbus — from July 2021 to April 2023
+As part of an internship made assembly manuals for airplane parts, basing on on computer designs and interviewing assembly workers.
+
+### Joint Institute for Nuclear Research — from July 2021 to April 2023
+I created a Python application that receives, archives and visually presents data transmitted by a cosmic ray CosmicWatch detector.
+Main problems to solve: serial communication, data processing and visualisation, design and implementation of the graphical user interface.
+I learnt about issues related to the source, propagation and detection of cosmic radiation and presented my project at the final seminar in English.
+
+## Education
+
+### BEng Aerospace, Warsaw University of Technology
+Thesis: Use of Error Correction Codes to prevent errors resulting from Single Event Upset phenomena
+
+I learned how to design and engineer things, so that they are feasible and manufacturable, from the idea to existance.
+
+It also taught me finishing projects on time by planning realistic deadlines and distributing workload across the week. Also, writing idiot-proof project documentation.
+
+</main>
+</BaseLayout>
+
+<style>{`
+  .resume :is(h2, h3):before {
+    content: none
+  }
+  .resume h2 {
+    padding: 8px 0;
+    border-bottom: 2px solid #e5e5e5;
+    @media (prefers-color-scheme: dark) {
+      border-color: #404040;
+    }
+  }
+`}</style>
