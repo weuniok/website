@@ -1,4 +1,3 @@
-import image from "@astrojs/image";
 import mdx from "@astrojs/mdx";
 import solidJs from "@astrojs/solid-js";
 import tailwind from "@astrojs/tailwind";
@@ -22,12 +21,11 @@ export default defineConfig({
   markdown: {
     // We'll highlight using Shiki Twoslash remark plugin
     syntaxHighlight: false,
+    gfm: true,
   },
   integrations: [
     tailwind({
-      config: {
-        applyBaseStyles: false,
-      },
+      applyBaseStyles: false,
     }),
     mdx({
       extendMarkdownConfig: true,
@@ -36,13 +34,13 @@ export default defineConfig({
       rehypePlugins: rehypePlugins,
     }),
     solidJs(),
-    image({
-      serviceEntryPoint: "@astrojs/image/sharp",
-    }),
   ],
   vite: {
     ssr: {
-      noExternal: ["@fontsource/inter", "@fontsource/brygada-1918"],
+      noExternal: [
+        "@fontsource-variable/inter",
+        "@fontsource-variable/brygada-1918",
+      ],
     },
     define: {
       "import.meta.env.PUBLIC_URL": JSON.stringify(makePublicURL()),

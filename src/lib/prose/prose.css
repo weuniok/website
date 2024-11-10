@@ -3,7 +3,7 @@
   --wide-content-width: min(var(--container-width), 100vw);
 }
 
-@media (min-width: 640px) {
+@media (min-width: 774px) {
   :root {
     --wide-breakout: 0.2;
     --wide-content-width: min(
@@ -41,7 +41,7 @@
   }
 
   & figcaption {
-    @apply px-6 text-gray-600 dark:text-gray-400;
+    @apply px-6 text-gray-600 dark:text-gray-600;
 
     font: italic 400 1em var(--serif);
   }
@@ -87,5 +87,47 @@
         @apply left-0;
       }
     }
+  }
+}
+
+details {
+  @apply border border-gray-300 dark:border-gray-700/60 rounded-lg -mx-4;
+
+  & summary::after {
+    content: "↧";
+    @apply absolute -top-0.5 right-2 translate-y-[-0.5px] text-xl;
+  }
+
+  &:not([open]) {
+    border-bottom-style: dashed;
+  }
+
+  &[open] summary {
+    @apply mb-2;
+
+    &::after {
+      transform: rotate(-180deg) translateY(-0.1em);
+    }
+  }
+
+  & > * {
+    @apply px-2 !m-0;
+  }
+
+  & summary {
+    cursor: pointer;
+    list-style: none;
+
+    & > p {
+      @apply !px-0 !m-0;
+    }
+
+    @apply relative
+    before:content-[''] before:absolute before:inset-0
+    before:-z-10 before:pointer-events-none
+    before:rounded before:transition-colors before:bg-transparent
+    hover:before:bg-gray-100 dark:hover:before:bg-gray-800/60
+    focus:before:bg-gray-100 dark:focus:before:bg-gray-800/60
+    selected:before:bg-gray-100 dark:selected:before:bg-gray-800/60;
   }
 }

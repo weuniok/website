@@ -1,6 +1,7 @@
 import type { RemarkPlugin } from "@astrojs/markdown-remark";
 import { valueToEstree } from "estree-util-value-to-estree";
 import getReadingTime from "reading-time";
+import type * as unist from "unist";
 import { visit } from "unist-util-visit";
 
 import type { PostFrontmatter, PostProps } from "../types";
@@ -12,7 +13,7 @@ const READING_TIME_IDENTIFIER: keyof PostFrontmatter = "readingTime";
  *
  * Same as remark-reading-time, but assigns to `frontmatter` instead of `file.data`.
  */
-export const readingTimePlugin: RemarkPlugin<[]> = () => {
+export const readingTimePlugin: RemarkPlugin = () => {
   return function (tree, file) {
     const data = file.data as { astro: PostProps };
 
@@ -39,10 +40,11 @@ export const remarkMdxReadingTimePlugin: RemarkPlugin<[]> = () => {
 
     const readingTime = data.astro.frontmatter.readingTime;
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (readingTime === undefined) return;
 
-    tree.children.unshift({
-      type: "mdxjsEsm" as any /* tree should be typed as MDX root, not MD root */,
+    (tree as unist.Parent).children.unshift({
+      type: "mdxjsEsm",
       data: {
         estree: {
           type: "Program",
