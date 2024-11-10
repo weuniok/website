@@ -16,7 +16,7 @@ export const mdxComponents = {
   h4: createHeading("h4"),
   h5: createHeading("h5"),
   h6: createHeading("h6"),
-  img: Image,
+  // img: Image,
   table: Table,
   ul: Ul,
   ol: Ol,
