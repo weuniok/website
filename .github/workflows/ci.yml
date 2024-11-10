@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 jobs:
   test-build-and-deploy:
-    runs-on: ubuntu-latest+
+    runs-on: ubuntu-latest
     permissions:
       deployments: write
       contents: write
@@ -20,7 +20,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: "21"
           cache: "pnpm"
 
       - name: Install
