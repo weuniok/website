@@ -194,6 +194,7 @@ export function CommandsPalette({
                 {/* <CommandItem href="https://twitter.com/hasparus">
                   Twitter
                 </CommandItem> */}
+                <CommandItem href="/resume">Resume</CommandItem>
                 <CommandItem href="https://github.com/weuniok/website">
                   GitHub
                 </CommandItem>
