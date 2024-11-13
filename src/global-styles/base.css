@@ -39,3 +39,8 @@ html {
         display: none !important;
     }
 }
+@media screen {
+  .onlyPrint {
+      display: none;
+  }
+}
