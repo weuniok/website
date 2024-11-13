@@ -50,5 +50,7 @@
       "language": "mdx",
       "scheme": "file"
     }
-  ]
+  ],
+  "cSpell.enabled": true,
+  "cSpell.enableFiletypes": ["mdx"]
 }
