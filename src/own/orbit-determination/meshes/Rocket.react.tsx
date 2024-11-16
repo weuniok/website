@@ -1,7 +1,7 @@
 /** @jsxImportSource react */
 
 import { type MeshProps, useLoader } from "@react-three/fiber";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 export const Rocket = ({ ...props }: MeshProps) => {
   const gltf = useLoader(

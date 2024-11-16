@@ -1,6 +1,6 @@
 /** @jsxImportSource react */
 
-import { Line, OrbitControls, SoftShadows, Text } from "@react-three/drei";
+import { Line, OrbitControls, SoftShadows } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Suspense, useMemo, useRef } from "react";
 import { DoubleSide, Group, Matrix4, Mesh, Vector3 } from "three";
@@ -56,22 +56,22 @@ export const OrbitalElementsCanvas = ({
   );
 };
 
-const Axes = () => {
-  return (
-    <group>
-      <axesHelper args={[5]} />
-      <Text position={[6, 0, 0]} fontSize={0.5} color="red">
-        X
-      </Text>
-      <Text position={[0, 6, 0]} fontSize={0.5} color="green">
-        Y
-      </Text>
-      <Text position={[0, 0, 6]} fontSize={0.5} color="blue">
-        Z
-      </Text>
-    </group>
-  );
-};
+// const Axes = () => {
+//   return (
+//     <group>
+//       <axesHelper args={[5]} />
+//       <Text position={[6, 0, 0]} fontSize={0.5} color="red">
+//         X
+//       </Text>
+//       <Text position={[0, 6, 0]} fontSize={0.5} color="green">
+//         Y
+//       </Text>
+//       <Text position={[0, 0, 6]} fontSize={0.5} color="blue">
+//         Z
+//       </Text>
+//     </group>
+//   );
+// };
 
 // Orbit path visualization component
 function OrbitPath({ elements }: { elements: OrbitalElements }) {
