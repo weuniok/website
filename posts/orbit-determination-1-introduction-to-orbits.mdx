@@ -10,7 +10,7 @@ import { mdxComponents as components } from "../src/lib/mdxComponents";
 
 # How We Determine Spacecraft Orbits from the Ground
 
-In this post, I’ll take you through the journey of determining the orbit of a spacecraft using a fascinating process that begins right here on Earth. Determining a spacecraft's path, based solely on data collected from ground-based observations, blends centuries-old astronomy techniques with advanced computational methods.
+In this series of posts, I’ll take you through the journey of determining the orbit of a spacecraft using a fascinating process that begins right here on Earth. Determining a spacecraft's path, based solely on data collected from ground-based observations, blends centuries-old astronomy techniques with advanced computational methods. I'll also try to squeeze a cheap joke or two in there, so buckle up!
 
 Let’s dive into the history, science, and process behind determining orbits.
 
@@ -18,11 +18,9 @@ Let’s dive into the history, science, and process behind determining orbits.
 
 ## The Historical Roots of Orbit Determination
 
-Orbit determination has been a fundamental part of celestial mechanics since the late 18th century. Pioneers like Pierre-Simon Laplace and Carl Friedrich Gauss developed early mathematical methods to calculate the paths of celestial bodies, such as planets and asteroids, using just a few observations from Earth. These methods, surprisingly robust for their time, involved calculating the position and velocity (state vector) of a celestial object based on minimal observations.
+Picture yourself in the late 18th century. Astronomers like Pierre-Simon Laplace and Carl Friedrich Gauss were revolutionizing our understanding of celestial mechanics. Armed with nothing but telescopes and brilliant mathematical insights, they developed methods to calculate the paths of planets and asteroids using just a handful of observations.
 
-Gauss’s work, in particular, changed the game: his method to determine the orbit of Ceres—the first asteroid discovered—remains one of the foundational techniques we use today, albeit enhanced by modern computational tools.
-
-Today, orbit determination is essential for applications ranging from satellite navigation and orbit corrections to collision avoidance and cataloging space debris.
+Gauss's breakthrough came in 1801 when he accurately determined the orbit of Ceres, the first discovered asteroid. His method was so groundbreaking that we still use enhanced versions of it today, now powered by modern computers. This work laid the foundation for everything from GPS satellites to space debris tracking.
 
 ---
 
@@ -31,38 +29,84 @@ Today, orbit determination is essential for applications ranging from satellite 
 To grasp the mechanics of orbit determination, it’s helpful to understand a few basics about how we describe an object’s motion in space.
 
 ### The State Vector
-A spacecraft’s motion is characterized by a **state vector**: a set of six values that specify its position and velocity at any given moment. These values allow us to precisely define where the spacecraft is and how fast it’s moving in each direction.
+Imagine trying to describe the exact position and movement of a bird in flight. You'd need to specify where it is (position) and how it's moving (velocity) in three-dimensional space. Similarly, a spacecraft's motion is described by a **state vector** - six numbers that tell us everything about its current motion:
+- **Position (x, y, z):** Where is the spacecraft?
+- **Velocity (vx, vy, vz):** How fast is it moving in each direction?
 
 ### Orbital Elements
-Instead of always describing a spacecraft with a position and velocity, we can also describe its orbit through **orbital elements**. This approach provides a high-level view of the orbit’s shape, orientation, and location. Orbital elements are generally defined by six parameters:
-1. **Semi-major axis (a):** Defines the orbit’s size.
-2. **Eccentricity (e):** Determines the orbit’s shape, from circular (e=0) to highly elongated (e close to 1).
-3. **Inclination (i):** The tilt of the orbit relative to Earth’s equator.
-4. **Longitude of the ascending node (Ω):** Describes where the orbit crosses the equatorial plane.
-5. **Argument of periapsis (ω):** Defines the orbit’s orientation within its plane.
-6. **True anomaly (ν):** Specifies the spacecraft's exact position along the orbit.
+If you know anything about spaceships, you might know that they move. Really fast. And they don't just move in a straight line. They move in orbits (duh). So unless you can solve a system of differential equations in your head, you can't really tell where a spacecraft is going to be in a few hours.
 
-Together, these six parameters provide a complete description of the orbit’s geometry and position relative to Earth.
+This is where orbital elements come in. They're like an architect's blueprint for a spacecraft's path, describing the shape and orientation of the entire orbit rather than just individual positions. There are six classical orbital elements:
+
+1. **Semi-major axis (a)**
+   - The orbit's "size"
+   - Think of it as the radius of a circular orbit
+
+2. **Eccentricity (e)**
+   - How "squished" the orbit is
+   - 0 = perfect circle, close to 1 = very elongated
+
+3. **Longitude of ascending node (Ω)**
+   - Where the orbit crosses Earth's equatorial plane going northward
+   - Like specifying the "starting point" of the orbit relative to Earth
+
+4. **Inclination (i)**
+   - The orbit's tilt relative to Earth's equator
+   - 0° = orbiting directly above the equator, 90° = passing over the poles
+
+5. **Argument of periapsis** <b>(</b>ω<b>)</b>
+   - Describes how the orbit's closest approach to Earth is oriented
+   - Think of it as pointing to where the spacecraft comes closest to Earth
+
+6. **True anomaly (ν)**
+   - The spacecraft's current position in its orbit
+   - Like a percentage of the lap completed, but measured in degrees
+
+<aside>
+For those familiar with Euler angles: The orientation of the orbital plane can be understood as a sequence of three rotations using [Ω, i, ω]. These are intrinsic (local) rotations performed in this order:
+
+First rotation by Ω about the Z-axis (longitude of ascending node)
+Then rotation by i about the new Y-axis (inclination)
+Finally rotation by ω about the resulting Z-axis (argument of periapsis)
+
+This Z-Y-Z Euler angle sequence transforms from the Earth-centered reference frame to the orbital reference frame. Each rotation is performed about the new, rotated axes - not the original fixed axes.
+</aside>
+
+### Simulation 
 
 import { OrbitalElementsVisualizer } from "../src/own/orbit-determination/OrbitalElements.react.tsx";
 
+You can play with the parameters below.
 <figure>
   <OrbitalElementsVisualizer client:visible />
-  {/* <figcaption class="mt-px flex items-center justify-between">
-    <div>
-      x<sup>2</sup> + y<sup>2</sup> + z<sup>2</sup> = 1 where x, y, z ∈ [0,1]
-    </div>
-    <Link
-      href="https://colab.research.google.com/drive/1Zh-qyZW4P42870cfVvdl1D3Xx_U_WH1G?usp=sharing"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {"see in Colab"}
-    </Link>
-  </figcaption> */}
 </figure>
 
 ---
+## Modern Applications
+
+Today, these orbital calculations are crucial for:
+- Satellite navigation and positioning
+- Space debris tracking and collision avoidance
+- Mission planning and orbital maneuvers
+- Communication satellite positioning
+- Space station resupply missions
+
+However, the real world is a bit more complicated than the idealized orbits we've discussed so far. Real spacecraft orbits are affected by a host of factors that can't be captured by simple orbital elements, like:
+- Earth's non-spherical gravity field (turns out, Earth is more pear-shaped than perfectly round)
+- Atmospheric drag (yes, there's still some atmosphere even hundreds of miles up)
+- Solar radiation pressure (sunlight actually pushes spacecraft around!)
+- Third-body gravitational effects (the Moon and Sun keep tugging on everything)
+
+But that's complicated. You could even say it's rocket science. So we won't get into that here.
+<aside>
+:)
+</aside>
+---
+That's all for this introduction to spacecraft orbits. In the next post, we'll get to the heart of our original question: how do we actually track these objects from the ground? No rocket science degree required.
+
+{/* TODO: recreate this  https://en.wikipedia.org/wiki/Euler_angles?useskin=vector#/media/File:Euler2a.gif */}
+{/* 
+
 
 ## From Observations to Orbit: Applying Gauss’s Method
 
@@ -111,7 +155,7 @@ Determining orbits from ground-based observations is a fascinating and complex p
 
 This research illustrates that, even with all the advances in space exploration, classical methods of orbit determination continue to play an essential role in modern astrodynamics. In an era where hundreds of new satellites are launched every year, understanding and predicting their paths is more important than ever—for everything from telecommunications to avoiding collisions in an increasingly crowded orbital space.
 
-To explore more about this research or dive deeper into the technical aspects of orbit determination, feel free to reach out or explore the thesis.
+To explore more about this research or dive deeper into the technical aspects of orbit determination, feel free to reach out or explore the thesis. */}
 
 ---
 
@@ -121,4 +165,4 @@ To explore more about this research or dive deeper into the technical aspects of
 
 ---
 
-Stay tuned for further insights and explorations into the mechanics of space and orbit determination!
+../src/lib/mdxComponents.tsx../src/lib/mdxComponents.tsx
