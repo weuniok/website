@@ -1,0 +1,168 @@
+---
+
+---
+
+import BaseLayout from "../src/layouts/BaseLayout.astro";
+
+export { mdxComponents as components } from "../src/lib/mdxComponents";
+import { mdxComponents as components } from "../src/lib/mdxComponents";
+
+
+# How We Determine Spacecraft Orbits from the Ground
+
+In this series of posts, I’ll take you through the journey of determining the orbit of a spacecraft using a fascinating process that begins right here on Earth. Determining a spacecraft's path, based solely on data collected from ground-based observations, blends centuries-old astronomy techniques with advanced computational methods. I'll also try to squeeze a cheap joke or two in there, so buckle up!
+
+Let’s dive into the history, science, and process behind determining orbits.
+
+---
+
+## The Historical Roots of Orbit Determination
+
+Picture yourself in the late 18th century. Astronomers like Pierre-Simon Laplace and Carl Friedrich Gauss were revolutionizing our understanding of celestial mechanics. Armed with nothing but telescopes and brilliant mathematical insights, they developed methods to calculate the paths of planets and asteroids using just a handful of observations.
+
+Gauss's breakthrough came in 1801 when he accurately determined the orbit of Ceres, the first discovered asteroid. His method was so groundbreaking that we still use enhanced versions of it today, now powered by modern computers. This work laid the foundation for everything from GPS satellites to space debris tracking.
+
+---
+
+## Understanding Orbits: The State Vector and Orbital Elements
+
+To grasp the mechanics of orbit determination, it’s helpful to understand a few basics about how we describe an object’s motion in space.
+
+### The State Vector
+Imagine trying to describe the exact position and movement of a bird in flight. You'd need to specify where it is (position) and how it's moving (velocity) in three-dimensional space. Similarly, a spacecraft's motion is described by a **state vector** - six numbers that tell us everything about its current motion:
+- **Position (x, y, z):** Where is the spacecraft?
+- **Velocity (vx, vy, vz):** How fast is it moving in each direction?
+
+### Orbital Elements
+If you know anything about spaceships, you might know that they move. Really fast. And they don't just move in a straight line. They move in orbits (duh). So unless you can solve a system of differential equations in your head, you can't really tell where a spacecraft is going to be in a few hours.
+
+This is where orbital elements come in. They're like an architect's blueprint for a spacecraft's path, describing the shape and orientation of the entire orbit rather than just individual positions. There are six classical orbital elements:
+
+1. **Semi-major axis (a)**
+   - The orbit's "size"
+   - Think of it as the radius of a circular orbit
+
+2. **Eccentricity (e)**
+   - How "squished" the orbit is
+   - 0 = perfect circle, close to 1 = very elongated
+
+3. **Longitude of ascending node (Ω)**
+   - Where the orbit crosses Earth's equatorial plane going northward
+   - Like specifying the "starting point" of the orbit relative to Earth
+
+4. **Inclination (i)**
+   - The orbit's tilt relative to Earth's equator
+   - 0° = orbiting directly above the equator, 90° = passing over the poles
+
+5. **Argument of periapsis** <b>(</b>ω<b>)</b>
+   - Describes how the orbit's closest approach to Earth is oriented
+   - Think of it as pointing to where the spacecraft comes closest to Earth
+
+6. **True anomaly (ν)**
+   - The spacecraft's current position in its orbit
+   - Like a percentage of the lap completed, but measured in degrees
+
+<aside>
+For those familiar with Euler angles: The orientation of the orbital plane can be understood as a sequence of three rotations using [Ω, i, ω]. These are intrinsic (local) rotations performed in this order:
+
+First rotation by Ω about the Z-axis (longitude of ascending node)
+Then rotation by i about the new Y-axis (inclination)
+Finally rotation by ω about the resulting Z-axis (argument of periapsis)
+
+This Z-Y-Z Euler angle sequence transforms from the Earth-centered reference frame to the orbital reference frame. Each rotation is performed about the new, rotated axes - not the original fixed axes.
+</aside>
+
+### Simulation 
+
+import { OrbitalElementsVisualizer } from "../src/own/orbit-determination/OrbitalElements.react.tsx";
+
+You can play with the parameters below.
+<figure>
+  <OrbitalElementsVisualizer client:visible />
+</figure>
+
+---
+## Modern Applications
+
+Today, these orbital calculations are crucial for:
+- Satellite navigation and positioning
+- Space debris tracking and collision avoidance
+- Mission planning and orbital maneuvers
+- Communication satellite positioning
+- Space station resupply missions
+
+However, the real world is a bit more complicated than the idealized orbits we've discussed so far. Real spacecraft orbits are affected by a host of factors that can't be captured by simple orbital elements, like:
+- Earth's non-spherical gravity field (turns out, Earth is more pear-shaped than perfectly round)
+- Atmospheric drag (yes, there's still some atmosphere even hundreds of miles up)
+- Solar radiation pressure (sunlight actually pushes spacecraft around!)
+- Third-body gravitational effects (the Moon and Sun keep tugging on everything)
+
+But that's complicated. You could even say it's rocket science. So we won't get into that here.
+<aside>
+:)
+</aside>
+---
+That's all for this introduction to spacecraft orbits. In the next post, we'll get to the heart of our original question: how do we actually track these objects from the ground? No rocket science degree required.
+
+{/* TODO: recreate this  https://en.wikipedia.org/wiki/Euler_angles?useskin=vector#/media/File:Euler2a.gif */}
+{/* 
+
+
+## From Observations to Orbit: Applying Gauss’s Method
+
+The central method I used in my thesis is an approach developed by Gauss, which allows us to calculate the state vector of an object based on three distinct observations. This method was revolutionary in Gauss’s time and is still incredibly effective for initial orbit calculations today.
+
+### Step-by-Step: Gauss’s Orbit Determination
+Gauss’s method involves the following steps:
+
+1. **Data Collection:** We start with three observations that provide the time, location, and direction of the spacecraft from a fixed position on Earth. Each observation provides a “snapshot” of where the spacecraft appears in the sky at a specific moment.
+
+2. **Calculate Angular Momentum and Orbital Elements:** Using the collected observations, we apply a series of calculations to derive the spacecraft's angular momentum and initial orbital elements. These calculations include:
+   - Determining the cross product of position and velocity vectors to find angular momentum.
+   - Calculating inclination, eccentricity, and other key parameters from these vectors.
+
+3. **Iterative Refinement:** The method's initial output provides an estimate of the orbit. By iterating on these calculations and refining them with new observational data or simulated conditions, we can adjust our results to increase accuracy. This iterative improvement allows for better adaptation to real-world factors, such as gravitational perturbations from Earth.
+
+---
+
+## Simulating the Method: Validating with Real Data
+
+To test and validate the method, I created simulated observations based on known orbital parameters of satellites like the International Space Station (ISS). The simulation involved:
+
+1. **Generating Observations:** Using software and TLE (Two-Line Element) data for the ISS, I generated sets of observations and applied Gauss’s method to determine its orbit.
+
+2. **Comparison with Real Data:** I then compared the calculated orbit against real data from Stellarium, an astronomy software that uses highly accurate models for celestial mechanics.
+
+3. **Analysis of Accuracy:** In ideal cases, the method produced highly accurate results. For real-world applications, some discrepancies arose due to simplified assumptions in the model. By applying iterative corrections, these discrepancies were minimized, showing the method's robustness for real-world observation data.
+
+---
+
+## Key Findings: What Works and Where Challenges Remain
+
+The process of determining orbits with Gauss’s method highlighted several important insights:
+
+1. **Accuracy in Short Intervals:** When the time between observations is short, Gauss’s method works with remarkable precision. Small adjustments can then refine the orbit further.
+
+2. **Iterative Correction Necessity:** As observation intervals increase, initial estimates diverge from real values due to factors like atmospheric drag or gravitational influences. Iterative corrections become essential in these cases to refine the orbital elements.
+
+3. **Adaptability of Classical Methods:** Gauss’s method, though classical, adapts well to modern computational tools and remains effective for preliminary orbit estimation. However, for highly precise requirements, more advanced numerical methods are often used to refine the results further.
+
+---
+
+## Bringing it All Together
+
+Determining orbits from ground-based observations is a fascinating and complex process that combines ancient principles with cutting-edge technology. Gauss’s method provides a powerful tool to achieve initial orbit estimates, setting the stage for more advanced numerical techniques where precision is critical.
+
+This research illustrates that, even with all the advances in space exploration, classical methods of orbit determination continue to play an essential role in modern astrodynamics. In an era where hundreds of new satellites are launched every year, understanding and predicting their paths is more important than ever—for everything from telecommunications to avoiding collisions in an increasingly crowded orbital space.
+
+To explore more about this research or dive deeper into the technical aspects of orbit determination, feel free to reach out or explore the thesis. */}
+
+---
+
+**References**
+1. Curtis, H. D. *Orbital Mechanics for Engineering Students.*
+2. Vetter, J. *Fifty Years of Orbit Determination: Development of Modern Astrodynamics.*
+
+---
+
+../src/lib/mdxComponents.tsx../src/lib/mdxComponents.tsx

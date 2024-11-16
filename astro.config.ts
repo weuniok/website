@@ -1,4 +1,5 @@
 import mdx from "@astrojs/mdx";
+import react from "@astrojs/react";
 import solidJs from "@astrojs/solid-js";
 import tailwind from "@astrojs/tailwind";
 import { defineConfig } from "astro/config";
@@ -33,7 +34,8 @@ export default defineConfig({
       remarkPlugins: remarkPlugins(__dirname),
       rehypePlugins: rehypePlugins,
     }),
-    solidJs(),
+    solidJs({ exclude: ["**/*.react.tsx"] }),
+    react({ include: ["**/*.react.tsx"] }),
   ],
   vite: {
     ssr: {
