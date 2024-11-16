@@ -30,15 +30,12 @@ export const OrbitalElementsCanvas = ({
       </group>
       <Axis
         color="red"
-        position={[0,0,0]}
+        position={[0, 0, 0]}
         rotation={[0, -elements.longitudeOfAscendingNode, elements.inclination]}
       />
 
       {/* Planet */}
-      <Planet
-        path={"src/images/orbit-determination/2k_mars.jpg"}
-        fallbackColor="orange"
-      />
+      <Planet path={"/2k_mars.jpg"} fallbackColor="orange" />
 
       {/* <Plane
         args={[100, 100]}
