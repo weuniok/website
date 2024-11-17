@@ -35,16 +35,6 @@ export const OrbitalElementsController = ({
       />
 
       <ElementSlider
-        label="Inclination"
-        value={elements.inclination}
-        min={0}
-        max={Math.PI * 2}
-        step={0.01}
-        onChange={(value) => setElements({ ...elements, inclination: value })}
-        formatDisplay={(value) => (value * (180 / Math.PI)).toFixed(0) + "°"}
-      />
-
-      <ElementSlider
         label="Longitude of Ascending Node"
         value={elements.longitudeOfAscendingNode}
         min={0}
@@ -53,6 +43,16 @@ export const OrbitalElementsController = ({
         onChange={(value) =>
           setElements({ ...elements, longitudeOfAscendingNode: value })
         }
+        formatDisplay={(value) => (value * (180 / Math.PI)).toFixed(0) + "°"}
+      />
+
+      <ElementSlider
+        label="Inclination"
+        value={elements.inclination}
+        min={0}
+        max={Math.PI * 2}
+        step={0.01}
+        onChange={(value) => setElements({ ...elements, inclination: value })}
         formatDisplay={(value) => (value * (180 / Math.PI)).toFixed(0) + "°"}
       />
 
@@ -99,20 +99,20 @@ const ElementSlider = ({
   formatDisplay?: (value: number) => string;
 }) => {
   return (
-    <div className="flex items-center justify-between gap-2">
-      <label className="font-bold">{label}:</label>
-      <div className="flex w-1/2 items-center">
-        <input
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={value}
-          onChange={(e) => onChange(parseFloat(e.target.value))}
-          className="h-7 w-full appearance-none rounded-full bg-gray-300 outline-none"
-        />
-        <b className="ml-2 w-16 text-center">{formatDisplay(value)}</b>
-      </div>
+    <div className="grid-cols-[1fr, 4fr, 1fr] grid grid-cols-10 items-center">
+      <label className="col-span-4 font-bold">{label}:</label>
+      {/* <div className="grid-cols-[3fr, 1fr] items-center"> */}
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => onChange(parseFloat(e.target.value))}
+        className="col-span-5 rounded-full"
+      />
+      <b className="text-center">{formatDisplay(value)}</b>
+      {/* </div> */}
     </div>
   );
 };
