@@ -16,7 +16,7 @@ export const OrbitalElementsCanvas = ({
 }) => {
   return (
     <Canvas
-      camera={{ position: [-5, 5, 0], fov: 45 }}
+      camera={{ position: [-5, 5, 3], fov: 45 }}
       shadows
       style={{ height: "400px" }}
     >
