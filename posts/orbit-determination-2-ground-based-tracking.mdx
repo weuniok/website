@@ -1,0 +1,240 @@
+---
+title: "Orbital Determination #2: Ground-Based Tracking Methods"
+
+---
+
+import BaseLayout from "../src/layouts/BaseLayout.astro";
+
+export { mdxComponents as components } from "../src/lib/mdxComponents";
+import { mdxComponents as components } from "../src/lib/mdxComponents";
+
+
+# Ground-Based Spacecraft Tracking: From Sightings to Orbits
+
+In our previous post, we explored the fundamentals of orbits and their historical background. Now, it's time to roll up our sleeves and dive into the practical aspects: how do we actually track spacecraft from the ground and transform those observations into orbital parameters?
+
+---
+
+## The Observer's Toolkit
+
+Before we <i>launch</i> into the mathematics, let's take a moment to understand what tools we use for ground-based spacecraft tracking.
+
+### Optical Tracking
+The simplest form of spacecraft observation uses optical telescopes. Whether you're an amateur astronomer with a backyard setup or working at a professional observatory, the principle remains the same:
+
+1. **Equipment**: Telescopes (ranging from amateur 8" reflectors to professional 1-meter observatories), equipped with cameras and precise timing systems
+2. **Measurement**: Right ascension and declination (α, δ) - essentially the celestial "latitude and longitude" of the spacecraft
+3. **Accuracy**: Capable of arc-second precision with modern equipment
+
+<aside>
+The U.S. military's Ground-Based Electro-Optical Deep Space Surveillance (GEODSS) system could detect a basketball at geostationary orbit (36,000 km altitude). Unfortunately they would miss a geostationary teapot.
+
+https://www.spaceforce.mil/About-Us/Fact-Sheets/Article/2197760/ground-based-electro-optical-deep-space-surveillance/
+</aside>
+
+### Radar Tracking
+For objects in lower orbits, radar provides both position and velocity information:
+
+1. **Equipment**: Large radio dishes or phased array systems that transmit radio pulses and measure their reflections
+2. **Measurement**: Range, range-rate (radial velocity), and angular position
+3. **Accuracy**: Range accuracy of a few meters, velocity accuracy of centimeters per second
+
+### Laser Ranging
+For the highest precision:
+
+1. **Equipment**: Specialized telescopes that fire short laser pulses at spacecraft equipped with retroreflectors
+2. **Measurement**: Round-trip time of laser pulses, giving extremely accurate range measurements
+3. **Accuracy**: Can achieve millimeter-level precision
+
+---
+
+## From Angles to Orbits: The Heart of the Problem
+
+When tracking a spacecraft optically, we're essentially collecting a series of angular measurements - directions in the sky - at specific times. The fundamental challenge is this: how do we convert these 2D directional measurements into a complete 3D orbit?
+
+### The Observation Vector
+
+Let's start with what we actually measure. From a ground station (whose position we know precisely), we observe the spacecraft and record:
+
+- The time of observation
+- The right ascension (α) - analogous to longitude on the celestial sphere
+- The declination (δ) - analogous to latitude on the celestial sphere
+
+These angular measurements give us a unit vector pointing from the observer to the spacecraft, which we can represent in an Earth-centered reference frame:
+
+{/* $$\hat{\mathbf{ρ}} = 
+{/* \begin{bmatrix} */}
+{/* \cos δ \cos α \\ */}
+{/* \cos δ \sin α \\ */}
+{/* \sin δ */}
+{/* \end{bmatrix}$$ */} 
+
+But there's a catch - we know the direction, but not the distance! This is the core challenge of angle-only orbit determination.
+
+### Simulation
+
+import { OrbitalElementsVisualizer as AngularMeasurementVisualizer } from "../src/own/orbit-determination/OrbitalElements.react.tsx";
+
+You can visualize how these angular measurements work with this interactive demonstration:
+
+<figure>
+  <AngularMeasurementVisualizer client:visible />
+</figure>
+
+Try moving your observation site to different locations and see how the angular measurements change!
+
+---
+
+## Gauss's Method: Three Observations to One Orbit
+
+Now we come to the mathematical heart of the matter. How do we actually compute an orbit from our observations? The method developed by Carl Friedrich Gauss in 1801 is astonishingly elegant and still forms the foundation of modern techniques.
+
+Gauss realized that with three observations (each giving direction but not distance), he could determine a unique orbit. Here's a simplified explanation of his approach:
+
+### Step 1: Establish the Geometric Relationship
+
+For each observation time $t_i$, we have:
+
+{/* $$\mathbf{r}_i = \mathbf{R}_i + ρ_i\hat{\mathbf{ρ}}_i$$ */}
+
+Where:
+{/* - $\mathbf{r}_i$ is the spacecraft's position vector (what we're solving for) */}
+{/* - $\mathbf{R}_i$ is the observer's position vector (known) */}
+{/* - $ρ_i$ is the slant range (unknown scalar distance) */}
+{/* - $\hat{\mathbf{ρ}}_i$ is the unit vector in the direction of the spacecraft (measured) */}
+
+### Step 2: Apply the Constraint of Orbital Motion
+
+This is where Gauss's genius comes in. All three position vectors must lie on a valid orbit, which means they must satisfy certain constraints from orbital mechanics. The key insight is that the spacecraft's position at different times is connected by universal laws of motion.
+
+One approach uses the fact that the three position vectors can be related by Lagrange's f and g functions, which describe how positions evolve along an orbit as a function of time:
+
+{/* $$\mathbf{r}_2 = f_1\mathbf{r}_1 + g_1\mathbf{v}_1$$ */}
+{/* $$\mathbf{r}_3 = f_3\mathbf{r}_1 + g_3\mathbf{v}_1$$ */}
+
+{/* Where $\mathbf{v}_1$ is the velocity at the first observation time, and the f and g coefficients depend on the orbital parameters and time differences. */}
+
+### Step 3: Solve the System of Equations
+
+{/* By combining these relationships with our observation equations, we can set up a system that can be solved for the unknown ranges $ρ_1$, $ρ_2$, and $ρ_3$. Once we know these distances, we can calculate the position vectors $\mathbf{r}_1$, $\mathbf{r}_2$, and $\mathbf{r}_3$. */}
+
+From any two of these position vectors (and their corresponding times), we can determine the velocity and thus the complete state vector, which gives us everything we need to define the orbit.
+
+### Step 4: Refine Through Iteration
+
+The initial solution typically needs refinement, as the f and g functions depend on the very orbital parameters we're trying to determine. This leads to an iterative process:
+
+1. Make an initial guess at the ranges
+2. Compute a preliminary orbit
+3. Use this orbit to refine the f and g functions
+4. Solve again for improved ranges
+5. Repeat until convergence
+
+---
+
+## Modern Enhancements: Beyond Basic Gauss
+
+While Gauss's method forms the foundation, modern orbit determination incorporates several important enhancements:
+
+### Batch Processing with Least Squares
+
+Instead of using just three observations, modern systems typically collect dozens or hundreds of measurements and use statistical methods to find the orbit that best fits all the data. The most common approach uses the method of least squares to minimize the difference between predicted and observed positions.
+
+### Statistical Filtering
+
+For ongoing orbit tracking, techniques like the Extended Kalman Filter (EKF) continuously update the orbital estimate as new observations arrive, accounting for measurement uncertainties and model imperfections.
+
+```python
+# Simplified example of EKF implementation for orbit updates
+def update_orbit_with_ekf(current_state, current_covariance, new_measurement, measurement_covariance):
+    # Predict state forward to measurement time
+    predicted_state = propagate_orbit(current_state, measurement_time - current_time)
+    
+    # Calculate Jacobian matrix (sensitivity of measurements to state changes)
+    H = calculate_measurement_jacobian(predicted_state)
+    
+    # Predicted measurement from the state
+    predicted_measurement = calculate_expected_measurement(predicted_state)
+    
+    # Innovation (difference between actual and predicted measurement)
+    innovation = new_measurement - predicted_measurement
+    
+    # Innovation covariance
+    S = H @ current_covariance @ H.T + measurement_covariance
+    
+    # Kalman gain
+    K = current_covariance @ H.T @ np.linalg.inv(S)
+    
+    # Update state
+    updated_state = current_state + K @ innovation
+    
+    # Update covariance
+    updated_covariance = (np.eye(len(current_state)) - K @ H) @ current_covariance
+    
+    return updated_state, updated_covariance
+```
+
+### High-Precision Force Models
+
+Modern orbit determination incorporates sophisticated models of all forces acting on the spacecraft:
+
+- Earth's gravitational field (including detailed geopotential models)
+- Third-body gravitational effects (Sun, Moon, planets)
+- Atmospheric drag (with detailed atmospheric density models)
+- Solar radiation pressure
+- Relativistic effects
+
+---
+
+## Practical Challenges in Spacecraft Tracking
+
+Despite all our mathematical sophistication, real-world tracking comes with several challenges:
+
+### Sparse Observations
+
+Ground stations can only observe satellites when they're overhead and visibility conditions are good. This means we often have significant gaps between observations, requiring robust orbit propagation through the gaps.
+
+### Maneuvering Spacecraft
+
+Many satellites periodically fire thrusters to maintain or change their orbits. These maneuvers invalidate simple orbital models and require additional techniques to detect and account for them.
+
+<aside>
+When tracking a satellite that suddenly disappears from its predicted position, the first question satellite operators ask is: "Did it maneuver, or did something bad happen?" The answer determines whether they celebrate a successful orbital adjustment or start planning a rescue mission!
+</aside>
+
+### Measurement Biases and Errors
+
+Real-world measurements contain various systematic and random errors. Calibration and error modeling become crucial for achieving high accuracy.
+
+---
+
+## Practical Example: DIY Satellite Tracking
+
+Believe it or not, you can track satellites with surprisingly modest equipment. Here's how to get started:
+
+1. **Equipment**: A DSLR camera with a telephoto lens (200mm+), a tripod, and a watch or phone for precise timing
+2. **When to look**: Use a satellite tracking app or website (like Heavens-Above.com) to find when bright satellites will pass overhead
+3. **Capture**: Take long-exposure photos (5-30 seconds) of the night sky during the satellite pass
+4. **Analysis**: The satellite will appear as a streak across the star background
+
+With more advanced equipment (like a motorized telescope mount) and software, amateurs can achieve remarkable tracking accuracy. There's an entire community of hobbyists who help track classified military satellites by pooling their observations!
+
+---
+
+## Conclusion: The Art and Science of Looking Up
+
+Ground-based tracking of spacecraft represents a beautiful intersection of classical celestial mechanics, modern computational methods, and observational astronomy. What began with Gauss's mathematical insights has evolved into a sophisticated global infrastructure that keeps tabs on thousands of objects circling our planet.
+
+In the next post, we'll explore how orbit determination enables critical space operations, from docking with the International Space Station to navigating spacecraft to distant planets. We'll also look at the growing challenge of space debris tracking and how the techniques we've discussed help prevent orbital collisions.
+
+Until then, next time you're outside on a clear night, look up! Those moving points of light are not just satellites - they're testaments to human ingenuity and our ability to understand the complex dance of objects in orbit.
+
+---
+
+**References**
+
+1. Vallado, D. A. *Fundamentals of Astrodynamics and Applications*
+2. Tapley, B. D., Schutz, B. E., & Born, G. H. *Statistical Orbit Determination*
+3. Montenbruck, O., & Gill, E. *Satellite Orbits: Models, Methods and Applications*
+
+---
