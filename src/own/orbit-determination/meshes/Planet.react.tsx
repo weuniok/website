@@ -1,8 +1,6 @@
 /** @jsxImportSource react */
 
-import {
-  useTexture
-} from "@react-three/drei";
+import { useTexture } from "@react-three/drei";
 import { type MeshProps } from "@react-three/fiber";
 import { Suspense } from "react";
 

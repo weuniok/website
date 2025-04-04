@@ -34,6 +34,7 @@ import {TelescopeVisualiser} from "../src/own/ground-based-tracking/Optical.reac
   <TelescopeVisualiser client:visible />
 </figure>
 
+---
 ### Radar Tracking: Bouncing Radio Waves Off Things
 For objects playing hard-to-get in lower orbits, radar provides both position and speed information.
 
@@ -60,37 +61,13 @@ From our observation post (whose position we know precisely thanks to GPS, or in
 
 These angular measurements give us a unit vector pointing from the observer to the spacecraft, which we can represent in an Earth-centered reference frame:
 
-{/* $$\hat{\mathbf{ρ}} = 
-{/* \begin{bmatrix} */}
-{/* \cos δ \cos α \\ */}
-{/* \cos δ \sin α \\ */}
-{/* \sin δ */}
-{/* \end{bmatrix}$$ */} 
 
 But there's a catch - we know the direction, but not the distance! This is the core challenge of angle-only orbit determination.
-
-{/* ### Simulation
-
-import { OrbitalElementsVisualizer as AngularMeasurementVisualizer } from "../src/own/orbit-determination/OrbitalElements.react.tsx";
-
-You can visualize how these angular measurements work with this interactive demonstration:
-
-<figure>
-  <AngularMeasurementVisualizer client:visible />
-</figure>
-
-Try moving your observation site to different locations and see how the angular measurements change! */}
-
----
-
-
 
 ---
 
 **References**
 
-[ https://space-geodesy.nasa.gov/techniques/SLR.html ]
-1. https://www.spaceforce.mil/About-Us/Fact-Sheets/Article/2197760/ground-based-electro-optical-deep-space-surveillance/
+ https://space-geodesy.nasa.gov/techniques/SLR.html 
+1.  https://www.spaceforce.mil/About-Us/Fact-Sheets/Article/2197760/ground-based-electro-optical-deep-space-surveillance/ 
 2. Merholz D. et al. *Detecting, Tracking and Imaging Space Debris*
-
----

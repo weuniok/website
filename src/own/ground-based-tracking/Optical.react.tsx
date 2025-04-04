@@ -1,44 +1,37 @@
 /** @jsxImportSource react */
 
-import { useRef, useState, useEffect, forwardRef } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useRef, useEffect } from "react";
+import { Canvas } from "@react-three/fiber";
 import {
   OrbitControls,
-  Stars,
-  Plane,
-  Html,
   Line,
   Center,
   View,
-  Environment,
-  MapControls,
-  PivotControls,
-  Bounds,
-  useGLTF,
   PerspectiveCamera,
-  OrthographicCamera,
-  ContactShadows,
 } from "@react-three/drei";
 import * as THREE from "three";
 import { Planet } from "../orbit-determination/meshes/Planet.react";
 import "./styles.css";
+import { Rocket } from "../orbit-determination/meshes/Rocket.react";
 
-const matrix = new THREE.Matrix4();
-const telescopePosition = new THREE.Vector3(0, 0, 1);
-const spacecraftPosition = new THREE.Vector3(3, 3, 3);
+function Telescope({
+  position,
+  lookAtPosition,
+}: {
+  position: THREE.Vector3;
+  lookAtPosition: THREE.Vector3;
+}) {
+  const ref = useRef<THREE.Mesh>(null);
 
-function Spacecraft({ position }: { position: THREE.Vector3 }) {
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.lookAt(lookAtPosition);
+      ref.current.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI * -0.5);
+    }
+  }, [position]);
+
   return (
-    <mesh position={position}>
-      <sphereGeometry args={[0.1, 32, 32]} />
-      <meshBasicMaterial color="yellow" />
-    </mesh>
-  );
-}
-
-function Telescope({ position }: { position: THREE.Vector3 }) {
-  return (
-    <mesh position={position}>
+    <mesh ref={ref} position={position}>
       <coneGeometry args={[0.2, 0.5, 32]} />
       <meshBasicMaterial color="green" />
     </mesh>
@@ -64,126 +57,87 @@ function LineOfSight({
   );
 }
 
-function Scene({ background = "white", ...props }) {
+function Scene({
+  telescopePosition,
+  spacecraftPosition,
+  ...props
+}: {
+  telescopePosition: THREE.Vector3;
+  spacecraftPosition: THREE.Vector3;
+  [key: string]: any;
+}) {
   return (
     <>
-      <color attach="background" args={[background]} />
-      <ambientLight />
-      <directionalLight
-        position={[10, 10, -15]}
-        castShadow
-        shadow-bias={-0.0001}
-        shadow-mapSize={1024}
-      />
-      {/* <ambientLight intensity={0.5} />
-                <pointLight position={[10, 10, 10]} /> */}
-      <group
-        matrixAutoUpdate={false}
-        // Why onUpdate and not just matrix={matrix} ?
-        // This is an implementation detail, overwriting (most) transform objects isn't possible in Threejs
-        // because they are defined read-only. Therefore Fiber will always call .copy() if you pass
-        // an object, for instance matrix={new THREE.Matrix4()} or position={new THREE.Vector3()}
-        // In this rare case we do not want it to copy the matrix, but refer to it.
-        onUpdate={(self) => (self.matrix = matrix)}
-        {...props}
-      >
-        {/* <Center> */}
-        <OrbitControls />
-        <Planet path={"/2k_mars.jpg"} fallbackColor="orange" />
-        <Spacecraft position={spacecraftPosition} />
-        <Telescope position={telescopePosition} />
+      <group>
+        <Planet path={"/2k_mars.jpg"} fallbackColor="orange" radius={1} />
+        {/* <Target/> */}
+        <Telescope
+          position={telescopePosition}
+          lookAtPosition={spacecraftPosition}
+        />
+        <Rocket
+          scale={[0.002, 0.002, 0.002]}
+          rotation={[0, 0, 0]}
+          position={spacecraftPosition}
+        />
         <LineOfSight
           spacecraftPosition={spacecraftPosition}
           telescopePosition={telescopePosition}
         />
-        {/* <Stars /> */}
-        {/* </Center> */}
+        <LineOfSight
+          spacecraftPosition={spacecraftPosition}
+          telescopePosition={new THREE.Vector3(0, 0, 0)}
+        />
       </group>
     </>
   );
 }
 
-// export function TelescopeVisualiser() {
-//   const ref = useRef();
-//   return (
-//     <div style={{ width: "auto", maxWidth: "100%" }}>
-//       <View>
-//         <PivotControls scale={0.4} depthTest={false} matrix={matrix} />
-//         <Scene background="aquamarine" matrix={matrix} />
-//         <OrbitControls makeDefault />
-//       </View>
-//       <View>
-//         <PivotControls
-//           activeAxes={[true, true, false]}
-//           depthTest={false}
-//           matrix={matrix}
-//         />
-//         <Scene background="lightpink" matrix={matrix} />
-//         <MapControls makeDefault screenSpacePanning enableRotate={false} />
-//       </View>
-//       <Canvas shadows eventSource={ref}>
-//         {/** Each view tracks one of the divs above and creates a sandboxed environment that behaves
-//              as if it were a normal everyday canvas, <View> will figure out the gl.scissor stuff alone. */}
-//         {/* <View.Port /> */}
-//         <Scene background="aquamarine" matrix={matrix} />
-//       </Canvas>
-//     </div>
-//   );
-// }
-
 export function TelescopeVisualiser() {
-  const ref = useRef();
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  const telescopePosition = new THREE.Vector3(0, 1, 1).normalize();
+  const spacecraftPosition = new THREE.Vector3(3, 3, 3);
+
   return (
-    <div
-      ref={ref}
-      // style={{ width: "auto", maxWidth: "100%" }}
-      className="container"
-    >
-      <Canvas eventSource={ref} className="canvas">
+    <div ref={ref} className="container">
+      <Canvas
+        eventSource={ref.current as HTMLElement}
+        className="canvas"
+        shadows
+      >
         <View.Port />
       </Canvas>
+
       <View index={1} className="view1">
-        <color attach="background" args={["#f0f0f0"]} />
+        <ambientLight intensity={0.3} />
+        <directionalLight position={[10, 10, 5]} intensity={0.8} castShadow />
         <PerspectiveCamera makeDefault position={[-5, 5, 3]} fov={35} />
-        <Lights />
-        <Bounds fit clip observe margin={1.5}>
-          <Scene />
-        </Bounds>
-        <ContactShadows
-          frames={1}
-          position={[0, -1, 0]}
-          blur={1}
-          opacity={0.6}
-        />
+        <Center>
+          <Scene
+            telescopePosition={telescopePosition}
+            spacecraftPosition={spacecraftPosition}
+          />
+        </Center>
         <OrbitControls makeDefault />
       </View>
       <View index={2} className="view2">
-        <color attach="background" args={["#d6edf3"]} />
-        <OrthographicCamera makeDefault position={[0, 0, 5]} zoom={80} />
-        <Lights />
-        <OrbitControls makeDefault />
-        <PivotControls depthTest={false}>
-          <Bounds fit clip observe margin={1.5}>
-            <Scene />
-          </Bounds>
-          <ContactShadows
-            frames={1}
-            position={[0, -1, 0]}
-            blur={1}
-            opacity={0.6}
-          />
-        </PivotControls>
+        <ambientLight intensity={0.3} />
+        <directionalLight position={[10, 10, 5]} intensity={0.8} castShadow />
+        <PerspectiveCamera position={telescopePosition} makeDefault />
+        <Scene
+          telescopePosition={telescopePosition}
+          spacecraftPosition={spacecraftPosition}
+        />
+        <OrbitControls
+          makeDefault
+          enablePan={false}
+          enableZoom={false}
+          enableRotate={false}
+          enableDamping={false}
+          target={spacecraftPosition}
+        />
       </View>
     </div>
-  );
-}
-
-function Lights() {
-  return (
-    <>
-      <ambientLight intensity={1} />
-      <pointLight position={[20, 30, 10]} />
-      <pointLight position={[-10, -10, -10]} color="blue" />
-    </>
   );
 }

@@ -14,7 +14,6 @@ body,
 }
 
 body {
-  background: #f0f0f0;
   font-family: inter;
 }
 
@@ -41,8 +40,11 @@ body {
 
 .view2 {
   /* position: absolute; */
-  top: 2em;
+  /* top: 2em;
   right: 2em;
   width: calc(250px - 2em);
-  height: calc(250px - 2em);
+  height: calc(250px - 2em); */
+  max-width: '100%';
+  height: 350px;
+  border: 1px solid #000;
 }
