@@ -1,6 +1,6 @@
 ---
 title: "Orbital Determination #2: The measurements"
-
+draft: True
 ---
 
 import BaseLayout from "../src/layouts/BaseLayout.astro";
@@ -11,13 +11,13 @@ import { mdxComponents as components } from "../src/lib/mdxComponents";
 
 # How to Stalk Satellites
 
-In our previous post, we explored the basics of orbits. Now, it's time to roll up our sleeves and dive into the practical aspects: do we actually track these speeding hunks of metal?
+In the previous post, we explored the basics of orbits. Now, it's time to roll up the sleeves and dive into the practical aspects: do we actually track these speeding hunks of metal?
 
 ---
 
 ## The Observer's Toolkit
 
-Before we <i>launch</i> into the mathematics, let's take a moment to understand what tools we use for ground-based spacecraft tracking.
+Before <i>launching</i> into the mathematics, let's take a moment to understand what tools we use for ground-based spacecraft tracking.
 
 ### Optical Tracking: Telescopes and Patience
 The simplest way to track spacecraft involves pointing fancy telescopes at the sky and saying "aha!" when you spot something that isn't a star. 
@@ -41,8 +41,6 @@ For objects playing hard-to-get in lower orbits, radar provides both position an
 These systems use large radio dishes or phased array systems that transmit radio pulses and measure their reflections. They capture range, range-rate (speed toward/away from you), and angular position with impressive precision.
 
 ### Laser Ranging: For When "Close Enough" Isn't Good Enough
-For the perfectionists among us.
-
 Here you just fire laser beams at your target. The spacecraft is equipped with retroreflectors (fancy mirrors) that reflect the laser beam back to the source. By measuring the time it takes for the laser pulse to travel to the spacecraft and back, we can calculate the distance with incredible precision. This can also work for spacecraft without retroreflectors, but the precision is not as good. The big advantage of laser ranging is that you not only measure the direction, but also the distance to the spacecraft.
 
 ---
