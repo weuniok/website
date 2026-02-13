@@ -20,61 +20,81 @@ import { mdxComponents as components } from "../lib/mdxComponents";
 
 ## Experience
 
-### QuickerSim — since June 2022
-Full-stack Developer at engineering company specializing in physical simulations.
-- Developed and maintained three web applications for engineering simulations with TS, React, Django/Node, MATLAB, and Python-based microservices on GCP. 
-- Architected a mission-critical system for energy trading, utilising machine learning and linear programming, integrated with the National Energy Operator.
-- Collaborated with engineering stakeholders to translate complex physical processes into intuitive web interfaces.
-- Led a cross-functional team of 3 developers, implementing agile methodologies and increasing delivery velocity by 30%.
-- Spearheaded implementation of CI/CD pipelines and test suites improving code quality and saving 10 hours monthly of developer's time.
+### Software Engineer at QuickerSim — since June 2022
+#### Distributed Photovoltaic Simulation Platform
+- **Engineered a CAD-like interactive frontend** TypeScript, React, and Google Maps API to model roof geometry and configure simulations.
+- **Reduced construction costs 50%** using a MATLAB linear programming solver that minimized ballast weight through aerodynamic regression.
+- **Accelerated key artifact generation by >30%** by refactoring Python PDF generation service.
+- **Eliminated silent failure states** by replacing HTTP polling with WebSockets in FastAPI, enabling real-time status feedback.
 
-### Warsaw University of Technology — from July 2023 to October 2023
-Developer, Sudden Infant Death Syndrome Prevention Research Project
-- Designed a multi-sensor vital signs monitoring systemd using React Native (mobile app), Python (controller) and PostgreSQL database, enabling real-time health monitoring for at-risk infants.
+#### National Energy Grid Integration
+- **Developed a high-reliability communication gateway** to interface with the
+  National Energy Operator (PSE), utilizing IBM MQ for asynchronous
+  messaging and a Python engine for XML serialization.
+- **Architected a hybrid frontend** using Django and React Islands, strategically deploying complex client-side logic for dynamic, schema-driven forms
 
-### Airbus — from May 2022 to June 2022
-Production Engineering Intern
-- Created assembly manuals for airplane components, basing on computer designs and interviewing assembly workers.
-- Learnt how to talk to people, write dead simple instructions, read schematics.
+#### Engineering Leadership
+- **Led a cross-functional squad** of 3 developers using Agile methodologies,
+  delivering complex technical migrations while ensuring high team velocity.
+- **Elevated code quality standards** by configuring pre-commit hooks, eliminating style-related
+  bottlenecks in code reviews.
+- **Cut deployment time by ~40%** by spearheading CI/CD adoption
 
-### Joint Institute for Nuclear Research — from July 2020 to September 2020
-Research Software Development Intern
-- Developed a Python application for real-time cosmic ray detector data processing and presented findings at an international seminar.
+### Co-Founder & Engineer at Neendu (IoT Medtech startup) - from July 2023 to October 2025 [evenings and weekends]
+- **Architected a high-performance mobile application** using Expo and
+  React Native, utilizing Tamagui for a unified, optimizing
+  compiler-based UI system to ensure consistent performance across devices.
+- **Implemented serverless backend** on Supabase (PostgreSQL), utilizing Row Level Security for real-time health data sync from BLE hardware.
+
+### **Research Software Development Intern** at Joint Institute for Nuclear Research — from July 2020 to September 2020
+- **Engineered a Python telemetry interface** connecting dual cosmic ray detectors via Serial I/O, implementing real-time data visualization and statistical logging.
 
 ## Education
 
 ### MScEng Computer Science, Warsaw University of Technology
-- Ongoing, expected graduation in 2026.
+
+- Extramural (Weekend) Program; Expected graduation in 2026.
 
 ### BEng Aerospace Engineering, Warsaw University of Technology
-- Thesis: "Use of Error Correction Codes to prevent errors resulting from Single Event Upset phenomena".
-- Learned to design feasible, manufacturable solutions from idea to existence. 
-- Led 30-person international student team, managing €40,000 annual budget through university procurement system.
-- As the presenter, secured 1st place in Design Presentation and co-authored 1st place Technical Documentation at SAE AeroDesign East 2022 competition.
-- Co-authored a research paper about 5G C-Band impact on aviation.
 
-## Technical Skills & Core competencies
-- **Engineering:** MATLAB, Python (NumPy, SciPy), simulating physical processes
-- **Full-Stack Development:** TypeScript, React, React Native, Node.js, Django
-- **Cloud & Infrastructure:** Google Cloud Platform (Kubernets, App Engine, Cloud Run), Docker, writing automated pipelines (CI/CD)
-- **Leadership:** Agile Team Management, Cross-functional Collaboration, Technical Writing
+- **Thesis:** Investigated algorithmic methods for maintaining data
+  integrity in high-radiation environments.
+- **Leadership:** Led 30-person team; managed €40,000 budget; 1st Place at SAE AeroDesign (USA) for Presentation & Documentation.
+- **Research:** Co-authored paper on 5G C-Band electromagnetic interference with aviation avionics.
 
+## Technical Skills & Core Competencies
+
+- **Languages:** TypeScript, Python (NumPy, SciPy), MATLAB, SQL, HTML/CSS
+- **Frameworks & Runtimes:** React (Vite, AntD, Mantine), React Native (Expo, Tamagui), Django, FastAPI, Node.js
+- **Cloud & Infrastructure:** GCP: Cloud Run, App Engine, Docker, CI/CD
+- **Engineering & Mathematics:** Linear Programming, Physics Simulations, Numerical Methods
+- **Other keywordes** REST API, microservices, testing
 
 <div class="text-gray-600 dark:text-gray-300 italic onlyPrint" style={{textAlign: "justify"}}> 
 ##
 I hereby consent to the processing of this CV and the personal data contained within, by anyone who receives this document for the sole purpose of considering my application for employment opportunities, in accordance with Article 6.1(a) of GDPR (EU) 2016/679.
 </div>
-
 </main>
 </BaseLayout>
 
 <style>{`
-  .resume :is(h2, h3):before {
+  .resume :is(h2, h3, h4):before {
     content: none
   }
   .resume h2 {
+    font-size: 1.2rem;
     padding: 8px 0;
     border-bottom: 2px solid #e5e5e5;
+    @media (prefers-color-scheme: dark) {
+      border-color: #404040;
+    }
+    margin-bottom: 0.1rem;
+  }
+  .resume h3 {
+    margin-top: 0.2rem;
+    font-size: 1.1rem;
+    padding: 8px 0;
+    border-bottom: 2px dashed #e5e5e5;
     @media (prefers-color-scheme: dark) {
       border-color: #404040;
     }
